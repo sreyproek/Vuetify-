@@ -109,7 +109,7 @@ export default {
 .footer {
   display: flex;
   justify-content: space-between;
-  gap: 400px;
+  gap: 350px;
 }
 .footer-p{
   font-family: "Arial Narrow Bold", sans-serif;
