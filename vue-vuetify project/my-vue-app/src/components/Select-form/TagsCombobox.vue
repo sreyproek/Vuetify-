@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       tags: [],
-      availableTags: ["Schuppe, Lockman and Dooley","Fantasy","Example1", "Example2", "Example3"],
+      availableTags: [],
     };
   },
   methods: {

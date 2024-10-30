@@ -6,6 +6,7 @@
         v-model="price"
         outlined
         type="number"
+        @input="updatePrice"
       ></v-text-field>
     </v-row>
   </v-container>
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    getPrice() {
-      return this.price;
+    updatePrice() {
+      this.$emit("update:modelValue", this.price); 
     },
   },
 };

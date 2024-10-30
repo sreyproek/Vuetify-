@@ -20,9 +20,14 @@
             <TagsCombobox
               v-model="DataCategory"
               label="Category"
-              class="mb-4"
-              :items="['Fantasy', 'Example4', 'Example5', 'Example6']"
+              :items="[
+                'Fantasy',
+                'Example4',
+                'Example5',
+                'Example6',
+              ]"
               multiple
+              class="mb-4"
             />
             <TextField v-model="DataTitle" label="Title" class="mt-4" />
             <PriceInput v-model="DataPrice" label="Price" class="mt-4" />
@@ -43,10 +48,10 @@
               multiple
             />
             <CommentableSwitch v-model="isCommentable" label="Commentable" />
-            <PublicationDate
+            <DatePicker
               v-model="publicationDate"
-              label="Publication Date"
-              class="mt-4"
+              label="PublicationDate"
+              class="mb-4"
             />
             <ChipSelects
               v-model="DataAuthors"
@@ -98,7 +103,8 @@
           <v-col cols="12">
             <h2 class="text-h5">Saved Data</h2>
             <v-row>
-              <v-col cols="12"
+              <v-col
+                cols="12"
                 v-for="(entry, index) in savedEntries"
                 :key="index"
               >
@@ -124,7 +130,7 @@ import CommentableSwitch from "./components/Select-form/CommentableSwitch.vue";
 import ChipSelects from "./components/Select-form/ChipSelects.vue";
 import TextField from "./components/Form-Input/TextField.vue";
 import SaveButton from "./components/Select-form/SaveButton.vue";
-import PublicationDate from "./components/Form-Input/PublicationDate.vue";
+import DatePicker from "./components/Form-Input/DatePicker.vue";
 import SummaryCard from "./components/Select-form/SummaryCard.vue";
 
 export default {
@@ -138,19 +144,19 @@ export default {
     ChipSelects,
     TextField,
     SaveButton,
-    PublicationDate,
+    DatePicker,
   },
   data() {
     return {
       savedEntries: [],
-      DataPublisher: "Schuppe, Lockman and Dooley",
+      DataPrice: [],
+      DataPublisher: ["Schuppe, Lockman and Dooley"],
       DataIsbn: "",
-      DataCategory: "Fantasy",
+      DataCategory: ["Fantasy"],
       DataTitle: "Sequi quo sapiente",
-      DataPrice: "",
       DataFormats: ["Paperback", "Pocket"],
       isCommentable: true,
-      publicationDate: "1984-11-18",
+      publicationDate: " ",
       DataAuthors: ["Idella Brown", "Augustus Bradtke"],
       DataTags: ["maxime", "quisquam", "magni", "voluptatem"],
       DataDescription: " ",
@@ -177,7 +183,6 @@ export default {
     saveData() {
       this.savedEntries.push({ ...this.summaryData });
       this.resetFields();
-      console.log("Data saved:", this.summaryData);
     },
     resetFields() {
       this.dataPublisher = "";
@@ -191,12 +196,6 @@ export default {
       this.dataAuthors = [];
       this.dataTags = [];
       this.dataDescription = "";
-    },
-    editEntry(index) {
-      console.log("Edit entry at index:", index);
-    },
-    deleteEntry(index) {
-      this.savedEntries.splice(index, 1);
     },
   },
 };
@@ -227,5 +226,9 @@ export default {
 }
 .text-left {
   margin-bottom: 10px;
+}
+.text-h5 {
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 </style>

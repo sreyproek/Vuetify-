@@ -1,17 +1,20 @@
+
 <template>
   <v-card class="ma-3">
     <v-card-text>
-      <v-list dense>
-        <v-list-item
+      <v-row>
+        <v-col
           v-for="(value, label) in cardFields"
           :key="label"
+          cols="12"
+          sm="6"
           class="d-flex align-center"
         >
           <v-list-item-title class="text-body-1">
             <strong>{{ label }}:</strong> {{ value }}
           </v-list-item-title>
-        </v-list-item>
-      </v-list>
+        </v-col>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>
@@ -28,14 +31,15 @@ export default {
   computed: {
     cardFields() {
       return {
-        Publisher: this.data.Publisher,
+        Publisher: this.data.publisher.join(", "), 
         Isbn: this.data.isbn,
-        Category: this.data.category,
+        Category: this.data.category.join(", "), 
+        Title: this.data.title,
         Price: this.data.price,
-        Formats: this.data.formats.join(", "),
-        Authors: this.data.authors.join(", "),
-        Tags: this.data.tags.join(", "),
-        "Publication Date": this.data.publicationDate,
+        Formats: this.data.formats.join(", "), 
+        Authors: this.data.authors.join(", "), 
+        Tags: this.data.tags.join(", "), 
+        Publication: this.data.publicationDate,
         Description: this.data.description,
       };
     },
@@ -47,11 +51,12 @@ export default {
 .v-card {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
+  padding: 5px;
 }
 .ma-3 {
   max-width: 1200px;
 }
 .v-list-item-title {
-  font-size: 16px;
+  font-size: 14px;
 }
 </style>
