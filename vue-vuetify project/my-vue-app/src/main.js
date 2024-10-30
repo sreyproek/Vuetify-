@@ -1,22 +1,7 @@
-// import { createApp } from 'vue'
-// import App from './App.vue'
-// import vuetify from './plugins/vuetify'
-// import { loadFonts } from './plugins/webfontloader'
-
-// loadFonts()
-
-// createApp(App)
-//   .use(vuetify)
-//   .mount('#app')
-
-
 import { createApp } from 'vue';
 import App from './App.vue';
-import { createVuetify } from 'vuetify';
-import 'vuetify/styles'; // Global styles
+import vuetify from './plugins/vuetify'; // Adjust path if necessary
 
-const vuetify = createVuetify();
-
-createApp(App)
-  .use(vuetify)
-  .mount('#app');
+const app = createApp(App);
+app.use(vuetify); // Use the configured Vuetify instance
+app.mount('#app');

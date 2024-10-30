@@ -33,6 +33,6 @@ export default {
 }
 
 .row-container {
-  width: 560px;
+  width: 570px;
 }
 </style>

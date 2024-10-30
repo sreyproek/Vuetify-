@@ -17,14 +17,19 @@
               v-model="dateFormatted"
               label="Publication Date"
               persistent-hint
-              prepend-icon="event"
-              @blur="date = parseDate(dateFormatted)"
+              append-icon="mdi-calendar" 
+              @click:append="menu1 = true"
+              readonly
               v-on="on"
             ></v-text-field>
           </template>
+
           <v-date-picker
             v-model="date"
             no-title
+            :allowed-dates="allowedDates"
+            min="2014-06-15"
+            max="2025-03-20"
             @input="updateDate"
           ></v-date-picker>
         </v-menu>
@@ -37,36 +42,36 @@
 export default {
   data() {
     return {
-      date: new Date().toISOString(),
-      dateFormatted: this.formatDate(new Date().toISOString()),
+      date: new Date().toISOString().substr(0, 10), 
+      dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
       menu1: false,
     };
   },
 
   watch: {
-    date() {
-      this.dateFormatted = this.formatDate(this.date);
+    date(newDate) {
+      this.dateFormatted = this.formatDate(newDate); 
     },
   },
 
   methods: {
     formatDate(date) {
       if (!date) return null;
-      const [year, month, day] = date.split("-");
-      return `${month}/${day}/${year}`;
-    },
-    parseDate(date) {
-      if (!date) return null;
-      const [month, day, year] = date.split("/");
-      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(date).toLocaleDateString(undefined, options);
     },
     updateDate() {
       this.menu1 = false; 
-    }
+    },
+    allowedDates(date) {
+      const day = new Date(date).getDay();
+      // Allow all days; customize as needed
+      return day >= 1 && day <= 5; // Example: Only allow Monday through Friday
+    },
   },
 };
 </script>
 
 <style scoped>
-/* Add any styles if needed */
+/* Add any custom styles if needed */
 </style>

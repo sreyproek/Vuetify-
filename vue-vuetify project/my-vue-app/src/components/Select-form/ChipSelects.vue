@@ -1,11 +1,10 @@
 <template>
-  <v-select
+  <v-select class="v-select"
     v-model="value"
     :items="items"
     label="Formats"
     chips
     multiple
-    style="margin-top: 4px;"
   ></v-select>
 </template>
 
@@ -17,3 +16,9 @@
     }),
   }
 </script>
+<style scoped>
+.v-select{
+  background: none;
+  border: none;
+}
+</style>

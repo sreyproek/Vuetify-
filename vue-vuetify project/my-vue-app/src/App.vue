@@ -14,30 +14,22 @@
                 'Example3',
               ]"
               multiple
-              class="mb-4"
             />
             <TextField v-model="DataIsbn" label="Isbn" />
             <TagsCombobox
               v-model="DataCategory"
               label="Category"
-              :items="[
-                'Fantasy',
-                'Example4',
-                'Example5',
-                'Example6',
-              ]"
+              :items="['Fantasy', 'Example4', 'Example5', 'Example6']"
               multiple
-              class="mb-4"
             />
-            <TextField v-model="DataTitle" label="Title" class="mt-4" />
-            <PriceInput v-model="DataPrice" label="Price" class="mt-4" />
+            <TextField v-model="DataTitle" label="Title" />
+            <PriceInput v-model="DataPrice" label="Price" />
           </v-col>
 
           <v-col cols="6">
             <ChipSelects
               v-model="DataFormats"
               label="Formats"
-              class="mb-4"
               :items="[
                 'Paperback',
                 'Pocket',
@@ -48,15 +40,14 @@
               multiple
             />
             <CommentableSwitch v-model="isCommentable" label="Commentable" />
+        
             <DatePicker
               v-model="publicationDate"
               label="PublicationDate"
-              class="mb-4"
             />
             <ChipSelects
               v-model="DataAuthors"
               label="Authors"
-              class="mb-4"
               :items="[
                 'Idella Brown',
                 'Augustus Bradtke',
@@ -108,10 +99,11 @@
                 v-for="(entry, index) in savedEntries"
                 :key="index"
               >
-                <SummaryCard
+                <summary-card
                   :data="entry"
-                  @edit="editEntry(index)"
-                  @delete="deleteEntry(index)"
+                  :index="index"
+                  @edit-card="handleEditCard"
+                  @delete-card="handleDeleteCard"
                 />
               </v-col>
             </v-row>
@@ -184,6 +176,18 @@ export default {
       this.savedEntries.push({ ...this.summaryData });
       this.resetFields();
     },
+    handleEditCard(index) {
+      console.log(`Editing card at index: ${index}`);
+    },
+    handleDeleteCard(index) {
+      if (index >= 0 && index < this.savedEntries.length) {
+        this.savedEntries.splice(index, 1); // Remove the card from the array
+        console.log(`Deleted card at index: ${index}`);
+      } else {
+        console.error(`Index out of bounds: ${index}`);
+      }
+    },
+
     resetFields() {
       this.dataPublisher = "";
       this.dataIsbn = "";
@@ -217,12 +221,6 @@ export default {
 .row-container {
   display: flex;
   justify-content: space-between;
-}
-.mt-4 {
-  margin-top: 10px;
-}
-.mb-4 {
-  margin-bottom: 10px;
 }
 .text-left {
   margin-bottom: 10px;
