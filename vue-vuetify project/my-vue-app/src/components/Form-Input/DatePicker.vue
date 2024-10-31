@@ -1,64 +1,59 @@
-
 <template>
   <v-container>
-    <v-row class="row-container" justify="center">
-      <v-menu
-        ref="menu1"
-        v-model="menu1"
-        :close-on-content-click="false"
-        transition="scale-transition"
-        offset-y
-        max-width="290px"
-      >
-        <template v-slot:activator="{ on }">
-          <v-text-field
-            v-model="dateFormatted"
-            label="Publication Date"
-            append-icon="mdi-calendar"
-            @click:append="menu1 = true"
-            readonly
-            v-on="on"
-          ></v-text-field>
-        </template>
-
-        <div v-if="menu1" class="date-picker-overlay" @click.self="menu1 = false">
-          <v-date-picker
-            v-model="date"
-            color="primary"
-            class="date-picker"
-            @input="updateDate"
-            :allowed-dates="allowedDates"
-          ></v-date-picker>
-        </div>
-      </v-menu>
+    <v-row justify="center">
+      <v-text-field
+        :model-value="modelValue"
+        label="Publication Date"
+        append-icon="mdi-calendar"
+        @click:append="showDatePicker = true"
+        readonly
+      ></v-text-field>
+      <v-dialog v-model="showDatePicker" max-width="290px">
+        <v-date-picker
+          :model-value="modelValue"
+          color="primary"
+          class="date-picker"
+          @input="updateDate"
+          :allowed-dates="allowedDates"
+          @update:model-value="$emit('update:model-value', $event)"
+        ></v-date-picker>
+      </v-dialog>
     </v-row>
   </v-container>
 </template>
 
 <script>
 export default {
+  props: {
+    modelValue: {
+      type: Date,
+    },
+  },
   data() {
     return {
+      showDatePicker: false,
       date: new Date(),
       dateFormatted: this.formatDate(new Date()),
-      menu1: false,
     };
   },
-
   watch: {
     date(newDate) {
       this.dateFormatted = this.formatDate(newDate);
     },
   },
-
   methods: {
     formatDate(date) {
-      if (!date) return null;
-      const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+      if (!date);
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
       return date.toLocaleDateString(undefined, options);
     },
     updateDate() {
-      this.menu1 = false;
+      this.showDatePicker = false;
     },
     allowedDates(date) {
       const day = new Date(date).getDay();
@@ -69,24 +64,11 @@ export default {
 </script>
 
 <style scoped>
-.row-container {
-  width: 570px;
-}
-.date-picker-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .date-picker {
-  max-width: 400px;
+  max-width: 570px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  border-radius: 20px;
   background-color: #f0f4f8;
-  padding: 16px;
+  padding: 10px;
 }
 </style>

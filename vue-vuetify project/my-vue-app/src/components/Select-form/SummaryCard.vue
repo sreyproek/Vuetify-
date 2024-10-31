@@ -16,14 +16,14 @@
         </v-col>
       </v-row>
     </v-card-text>
-    <v-card-actions class="v-card-actions">
-      <v-btn class="v-btn" color="blue" @click="editCard">
+    <div class="d-btn">
+      <v-btn color="blue" @click="editCard">
         <v-icon left>mdi-pencil</v-icon> Edit
       </v-btn>
       <v-btn class="v-btn1" color="red" @click="deleteCard">
         <v-icon left>mdi-delete</v-icon> Delete
       </v-btn>
-    </v-card-actions>
+    </div>
   </v-card>
 </template>
 
@@ -51,15 +51,15 @@ export default {
         Formats: this.data.formats.join(", "),
         Authors: this.data.authors.join(", "),
         Tags: this.data.tags.join(", "),
-        Publication: this.data.publicationDate,
+        Publication_Date: this.data.PublicationDate, 
         Description: this.data.description,
       };
     },
   },
   methods: {
-    editCard() {
-      this.$emit("edit-card", this.index);
-    },
+  editCard() {
+    this.$emit("edit-card",this.index);
+  },
     deleteCard() {
       this.$emit("delete-card", this.index);
     },
@@ -79,20 +79,21 @@ export default {
 .v-list-item-title {
   font-size: 14px;
 }
-.v-btn{
+.v-btn {
   border-radius: 30px;
   padding: 10px 20px;
   margin-right: 20px;
-  background-color: rgb(204, 242, 242);
 }
-.v-btn1{
+.v-btn1 {
   border-radius: 30px;
   padding: 10px 20px;
-  margin-right: 20px;
-  background-color: rgb(227, 155, 155);
+  margin-right: 10px;
 }
-.v-card-actions{
+.d-btn {
   display: flex;
   justify-content: end;
+  margin-bottom: 10px;
+  margin-right: 10px;
 }
 </style>
+

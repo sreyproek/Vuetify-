@@ -39,9 +39,8 @@
               multiple
             />
             <CommentableSwitch v-model="isCommentable" label="Commentable" />
+            <DatePicker v-model="date" label="Publication Date" />
 
-            <DatePicker v-model="DataPublication" label="PublicationDate" />
-            
             <ChipSelects
               v-model="DataAuthors"
               label="Authors"
@@ -91,7 +90,7 @@
                 v-for="(entry, index) in savedEntries"
                 :key="index"
               >
-                <summary-card
+                <SummaryCard
                   :data="entry"
                   :index="index"
                   @edit-card="handleEditCard"
@@ -140,7 +139,7 @@ export default {
       DataTitle: "Sequi quo sapiente",
       DataFormats: ["Paperback", "Pocket"],
       isCommentable: true,
-      publicationDate: "",
+      date: new Date(),
       DataAuthors: ["Idella Brown", "Augustus Bradtke"],
       DataTags: ["maxime", "quisquam", "magni", "voluptatem"],
       DataDescription: " ",
@@ -158,22 +157,35 @@ export default {
         isCommentable: this.isCommentable,
         authors: this.DataAuthors,
         tags: this.DataTags,
-        publicationDate: this.DataPublication,
+        PublicationDate: this.date,
         description: this.DataDescription,
       };
     },
   },
   methods: {
     saveData() {
-      this.savedEntries.push({ ...this.summaryData });
+    const newEntry = { ...this.summaryData };
+    const exists = this.savedEntries.some(entry => entry.isbn === newEntry.isbn);
+
+    if (!exists) {
+      this.savedEntries.push(newEntry);
+      console.log('Data saved:', newEntry); 
       this.resetFields();
-    },
+    } else {
+      console.error('Duplicate entry, not saved:', newEntry); 
+    }
+  },
+  // saveData() {
+  //     this.savedEntries.push({ ...this.summaryData });
+  //     this.resetFields();
+  //   },
+
     handleEditCard(index) {
       console.log(`Editing card at index: ${index}`);
     },
     handleDeleteCard(index) {
       if (index >= 0 && index < this.savedEntries.length) {
-        this.savedEntries.splice(index, 1); // Remove the card from the array
+        this.savedEntries.splice(index, 1);
         console.log(`Deleted card at index: ${index}`);
       } else {
         console.error(`Index out of bounds: ${index}`);
@@ -187,7 +199,7 @@ export default {
       this.dataPrice = "";
       this.dataFormats = [];
       this.isCommentable = false;
-      this.dataPublication = "";
+      this.date = new Date();
       this.dataAuthors = [];
       this.dataTags = [];
       this.dataDescription = "";
@@ -199,8 +211,6 @@ export default {
 <style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 20px;
