@@ -25,7 +25,6 @@
             <TextField v-model="DataTitle" label="Title" />
             <PriceInput v-model="DataPrice" label="Price" />
           </v-col>
-
           <v-col cols="6">
             <ChipSelects
               v-model="DataFormats"
@@ -40,11 +39,9 @@
               multiple
             />
             <CommentableSwitch v-model="isCommentable" label="Commentable" />
-        
-            <DatePicker
-              v-model="publicationDate"
-              label="PublicationDate"
-            />
+
+            <DatePicker v-model="DataPublication" label="PublicationDate" />
+            
             <ChipSelects
               v-model="DataAuthors"
               label="Authors"
@@ -72,23 +69,18 @@
               multiple
             />
           </v-col>
-        </v-row>
 
-        <v-row class="row-container">
           <DescriptionInput
             v-model="DataDescription"
             :readonly="!isCommentable"
             label="Description"
           />
-        </v-row>
 
-        <v-row class="row-container">
           <v-col cols="12" class="text-left">
             <SaveButton label="Save" @click="saveData" />
           </v-col>
+          <v-divider class="my-4"></v-divider>
         </v-row>
-
-        <v-divider class="my-4"></v-divider>
 
         <v-row class="row-container">
           <v-col cols="12">
@@ -148,7 +140,7 @@ export default {
       DataTitle: "Sequi quo sapiente",
       DataFormats: ["Paperback", "Pocket"],
       isCommentable: true,
-      publicationDate: " ",
+      publicationDate: "",
       DataAuthors: ["Idella Brown", "Augustus Bradtke"],
       DataTags: ["maxime", "quisquam", "magni", "voluptatem"],
       DataDescription: " ",
@@ -166,7 +158,7 @@ export default {
         isCommentable: this.isCommentable,
         authors: this.DataAuthors,
         tags: this.DataTags,
-        publicationDate: this.publicationDate,
+        publicationDate: this.DataPublication,
         description: this.DataDescription,
       };
     },
@@ -187,7 +179,6 @@ export default {
         console.error(`Index out of bounds: ${index}`);
       }
     },
-
     resetFields() {
       this.dataPublisher = "";
       this.dataIsbn = "";
@@ -196,7 +187,7 @@ export default {
       this.dataPrice = "";
       this.dataFormats = [];
       this.isCommentable = false;
-      this.publicationDate = "";
+      this.dataPublication = "";
       this.dataAuthors = [];
       this.dataTags = [];
       this.dataDescription = "";
@@ -222,11 +213,10 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-.text-left {
-  margin-bottom: 10px;
-}
 .text-h5 {
-  margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+}
+.cts {
+  widows: 600px;
 }
 </style>
