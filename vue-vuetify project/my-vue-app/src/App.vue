@@ -76,16 +76,13 @@
 
           <v-col cols="12" class="text-left">
             <SaveButton label="Save" @click="saveData" />
-            <!-- <SaveButton label="Save" @click.prevent="saveData" /> -->
-
           </v-col>
           <v-divider class="my-4"></v-divider>
+
         </v-row>
 
-        <v-row class="row-container">
           <v-col cols="12">
             <h2 class="text-h5">Saved Data</h2>
-            <v-row>
               <v-col
                 cols="12"
                 v-for="(entry, index) in savedEntries"
@@ -98,9 +95,8 @@
                   @delete-card="handleDeleteCard"
                 />
               </v-col>
-            </v-row>
           </v-col>
-        </v-row>
+
 
         <!-- Edit Form -->
         <!-- ============================================================= -->
@@ -255,11 +251,23 @@ export default {
     },
   },
   methods: {
+    // saveData() {
+    //   console.log("Saving data...");
+    //   this.savedEntries.push({ ...this.summaryData });
+    //   this.resetFields();
+    // },
     saveData() {
-      console.log("Saving data...");
-      this.savedEntries.push({ ...this.summaryData });
-      this.resetFields();
-    },
+    if (this.isSaving) return;
+    this.isSaving = true; 
+
+    console.log("Saving data...");
+    this.savedEntries.push({ ...this.summaryData });
+    this.resetFields();
+
+    setTimeout(() => {
+      this.isSaving = false;
+    }, 100);
+  },
     handleEditCard(index) {
       this.editedIndex = index;
       this.editedData = { ...this.savedEntries[index] };
@@ -329,9 +337,10 @@ export default {
   justify-content: space-between;
 }
 .Description-edit {
-  width: 1150px;
+  width: 1200px;
   display: block;
   justify-content: center;
+  margin-right: 20px;
 }
 .saveEditedData{
   margin: 10px 40px;
