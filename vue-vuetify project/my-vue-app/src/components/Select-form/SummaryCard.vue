@@ -43,16 +43,16 @@ export default {
   computed: {
     cardFields() {
       return {
-        Publisher: this.data.publisher.join(", "),
-        Isbn: this.data.isbn,
-        Category: this.data.category.join(", "),
-        Title: this.data.title,
-        Price: this.data.price,
-        Formats: this.data.formats.join(", "),
-        Authors: this.data.authors.join(", "),
-        Tags: this.data.tags.join(", "),
-        Publication_Date: this.data.PublicationDate, 
-        Description: this.data.description,
+      Publisher: Array.isArray(this.data.publisher) ? this.data.publisher.join(", ") : this.data.publisher,
+      Isbn: this.data.isbn,
+      Category: Array.isArray(this.data.category) ? this.data.category.join(", ") : this.data.category,
+      Title: this.data.title,
+      Price: this.data.price,
+      Formats: Array.isArray(this.data.formats) ? this.data.formats.join(", ") : this.data.formats,
+      Authors: Array.isArray(this.data.authors) ? this.data.authors.join(", ") : this.data.authors,
+      Tags: Array.isArray(this.data.tags) ? this.data.tags.join(", ") : this.data.tags,
+      Publication_Date: this.data.PublicationDate,
+      Description: this.data.description,
       };
     },
   },

@@ -40,7 +40,6 @@
             />
             <CommentableSwitch v-model="isCommentable" label="Commentable" />
             <DatePicker v-model="date" label="Publication Date" />
-
             <ChipSelects
               v-model="DataAuthors"
               label="Authors"
@@ -77,6 +76,8 @@
 
           <v-col cols="12" class="text-left">
             <SaveButton label="Save" @click="saveData" />
+            <!-- <SaveButton label="Save" @click.prevent="saveData" /> -->
+
           </v-col>
           <v-divider class="my-4"></v-divider>
         </v-row>
@@ -100,6 +101,95 @@
             </v-row>
           </v-col>
         </v-row>
+
+        <!-- Edit Form -->
+        <!-- ============================================================= -->
+        <v-dialog v-model="isEditing" max-width="1200px">
+          <v-card>
+            <v-card-title class="title-edit">Edit Card Data</v-card-title>
+            <v-form ref="editForm" class="form-edit">
+              <v-col cols="6">
+                <TagsCombobox
+                  v-model="editedData.publisher"
+                  label="Publisher"
+                  :items="[
+                    'Schuppe, Lockman and Dooley',
+                    'Example1',
+                    'Example2',
+                    'Example3',
+                  ]"
+                ></TagsCombobox>
+
+                <v-text-field v-model="editedData.isbn" label="Isbn"></v-text-field>
+                
+                <TagsCombobox
+                  v-model="editedData.category"
+                  label="Category"
+                   :items="[
+                    'Fantasy', 
+                    'Example4', 
+                    'Example5', 
+                    'Example6'
+                  ]"
+                ></TagsCombobox>
+                <v-text-field v-model="editedData.title" label="Title"></v-text-field>
+                <PriceInput v-model="editedData.price" label="Price" ></PriceInput>
+              </v-col>
+              <v-col cols="6">
+                <ChipSelects
+                  v-model="editedData.formats"
+                  label="Formats"
+                  :items="[
+                   'Paperback',
+                   'Pocket',
+                   'Example7',
+                   'Example8',
+                   'Example9',
+                  ]"
+                ></ChipSelects>
+                <CommentableSwitch v-model="editedData.CommentableSwitch" label="Commentable" />
+                <DatePicker v-model="editedData.PublicationDate" label="Publication Date"></DatePicker>
+                <ChipSelects
+                  v-model="editedData.authors"
+                  label="Authors"
+                  :items="[
+                   'Idella Brown',
+                   'Augustus Bradtke',
+                   'Example10',
+                   'Example11',
+                   'Example12',
+                  ]"
+                ></ChipSelects>
+                <ChipSelects
+                  v-model="editedData.tags"
+                  label="Tags"
+                  :items="[
+                    'maxime',
+                    'quisquam',
+                    'magni',
+                    'voluptatem',
+                    'Example13',
+                    'Example14',
+                    'Example15',
+              ]"
+                ></ChipSelects>
+              </v-col>
+            </v-form>
+            <DescriptionInput
+              v-model="editedData.description"
+              :readonly="!isCommentable"
+              label="Description"
+              class="Description-edit"
+            ></DescriptionInput>
+            <v-card-actions class="saveEditedData">
+              <v-btn color="primary" @click="saveEditedData">Save</v-btn>
+              <v-btn @click="closeEditForm">Cancel</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <!-- ============================================================== -->
+      
       </v-container>
     </div>
   </v-app>
@@ -141,8 +231,11 @@ export default {
       isCommentable: true,
       date: new Date(),
       DataAuthors: ["Idella Brown", "Augustus Bradtke"],
-      DataTags: ["maxime", "quisquam", "magni", "voluptatem"],
+      DataTags: ["maxime", "quisquam", "magni",],
       DataDescription: " ",
+      isEditing: false,
+      editedIndex: null,
+      editedData: {},
     };
   },
   computed: {
@@ -154,7 +247,6 @@ export default {
         title: this.DataTitle,
         price: this.DataPrice,
         formats: this.DataFormats,
-        isCommentable: this.isCommentable,
         authors: this.DataAuthors,
         tags: this.DataTags,
         PublicationDate: this.date,
@@ -164,45 +256,43 @@ export default {
   },
   methods: {
     saveData() {
-    const newEntry = { ...this.summaryData };
-    const exists = this.savedEntries.some(entry => entry.isbn === newEntry.isbn);
-
-    if (!exists) {
-      this.savedEntries.push(newEntry);
-      console.log('Data saved:', newEntry); 
+      console.log("Saving data...");
+      this.savedEntries.push({ ...this.summaryData });
       this.resetFields();
-    } else {
-      console.error('Duplicate entry, not saved:', newEntry); 
-    }
-  },
-  // saveData() {
-  //     this.savedEntries.push({ ...this.summaryData });
-  //     this.resetFields();
-  //   },
-
+    },
     handleEditCard(index) {
-      console.log(`Editing card at index: ${index}`);
+      this.editedIndex = index;
+      this.editedData = { ...this.savedEntries[index] };
+      this.isEditing = true;
     },
     handleDeleteCard(index) {
       if (index >= 0 && index < this.savedEntries.length) {
         this.savedEntries.splice(index, 1);
-        console.log(`Deleted card at index: ${index}`);
-      } else {
-        console.error(`Index out of bounds: ${index}`);
       }
     },
+    saveEditedData() {
+    if (this.editedIndex !== null) {
+      this.savedEntries[this.editedIndex] = { ...this.editedData };
+      this.isEditing = false; 
+      this.editedIndex = null;
+      this.editedData = {};  
+    }
+  },
+    closeEditForm() {
+      this.isEditing = false;
+      this.editedData = {};
+    },
     resetFields() {
-      this.dataPublisher = "";
-      this.dataIsbn = "";
-      this.dataCategory = [];
-      this.dataTitle = "";
-      this.dataPrice = "";
-      this.dataFormats = [];
-      this.isCommentable = false;
+      this.DataPublisher = ["Schuppe, Lockman and Dooley"];
+      this.DataIsbn = "";
+      this.DataCategory = ["Fantasy"];
+      this.DataTitle = "Sequi quo sapiente";
+      this.DataPrice = [];
+      this.DataFormats = ["Paperback", "Pocket"];
       this.date = new Date();
-      this.dataAuthors = [];
-      this.dataTags = [];
-      this.dataDescription = "";
+      this.DataAuthors = ["Idella Brown", "Augustus Bradtke"];
+      this.DataTags = ["maxime", "quisquam", "magni", "voluptatem"];
+      this.DataDescription = " ";
     },
   },
 };
@@ -227,6 +317,23 @@ export default {
   margin-bottom: 20px;
 }
 .cts {
-  widows: 600px;
+  width: 600px;
+}
+.title-edit {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+.form-edit {
+  display: flex;
+  justify-content: space-between;
+}
+.Description-edit {
+  width: 1150px;
+  display: block;
+  justify-content: center;
+}
+.saveEditedData{
+  margin: 10px 40px;
 }
 </style>
